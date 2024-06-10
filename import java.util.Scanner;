@@ -1,0 +1,191 @@
+import java.util.Scanner;
+
+ class JobPortalManagementSystem {
+
+    static String[] companyNames = {"Google", "Microsoft", "IBM", "Global Solutions", "Future Enterprises"};
+    static String[] passwords = {"1234", "xyz456", "tech789", "global321", "future654"};
+    static String[] educationRequired = {"Bachelor's", "Master's", "PhD", "Diploma", "High School"};
+    static String[] locations = {"New York", "San Francisco", "London", "Tokyo", "Sydney"};
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Welcome to the Job Portal Management System!");
+            System.out.println("--------------------------------------------");
+            System.out.println("1. Login as a Recruiter");
+            System.out.println("2. Login as a Job Seeker");
+            System.out.println("3. Exit");
+            System.out.print("Enter a choice: ");
+            int choice = scanner.nextInt();
+            System.out.println("--------------------------------------------");
+
+            switch (choice) {
+                case 1:
+                    loginAsRecruiter(scanner);
+                    break;
+                case 2:
+                    loginAsJobSeeker(scanner);
+                    break;
+                case 3:
+                    System.out.println("Exiting the system. Goodbye!");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void loginAsRecruiter(Scanner scanner) {
+        System.out.print("Enter company name: ");
+        String enteredCompanyName = scanner.next().trim();  // Trim to remove leading/trailing spaces
+        System.out.print("Enter password: ");
+        String password = scanner.next();
+
+        int index = findRecruiter(enteredCompanyName, password);
+
+        if (index != -1) {
+            System.out.println("Login successful! Welcome, " + companyNames[index] + "!");
+            while (true) {
+                System.out.println("Recruiter options:");
+                System.out.println("1. Post Job");
+                System.out.println("2. View Job Seekers");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice: ");
+
+                int recruiterChoice = scanner.nextInt();
+
+                switch (recruiterChoice) {
+                    case 1:
+                        postJob(companyNames[index], scanner);
+                        break;
+                    case 2:
+                        viewJobSeekers(companyNames[index]);
+                        break;
+                    case 3:
+                        System.out.println("Logging out. Goodbye!");
+                        return;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }
+        } else {
+            System.out.println("Invalid credentials. Please try again.");
+        }
+    }
+
+    private static void loginAsJobSeeker(Scanner scanner) {
+        System.out.println("Job Seeker options:");
+        System.out.println("1. Display Jobs");
+        System.out.println("2. Apply for Job");
+        System.out.println("3. Exit");
+        System.out.print("Enter your choice: ");
+
+        int seekerChoice = scanner.nextInt();
+
+        switch (seekerChoice) {
+            case 1:
+                displayJobs();
+                break;
+            case 2:
+                applyForJob(scanner);
+                break;
+            case 3:
+                System.out.println("Logging out. Goodbye!");
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+        }
+    }
+
+    private static void displayJobs() {
+        System.out.println("Available Jobs:");
+        System.out.println("--------------------------------------------");
+
+        for (int i = 0; i < companyNames.length; i++) {
+            System.out.println("Company: " + companyNames[i]);
+            System.out.println("Location: " + locations[i]);
+            System.out.println("Title: Software Engineer");
+            System.out.println("Salary: $80,000");
+            System.out.println("Education Required: " + educationRequired[i]);
+            System.out.println("--------------------------------------------");
+        }
+    }
+
+    private static void applyForJob(Scanner scanner) {
+        System.out.println("Available Jobs:");
+
+        for (int i = 0; i < companyNames.length; i++) {
+            System.out.println(i + ". Company: " + companyNames[i]);
+        }
+
+        System.out.print("Enter the Company ID you want to apply for: ");
+        int companyId = scanner.nextInt();
+
+        if (companyId >= 0 && companyId < companyNames.length) {
+            System.out.println("Enter your details:");
+            System.out.print("Enter your username: ");
+            String username = scanner.next();
+            System.out.print("Enter your age: ");
+            int age = scanner.nextInt();
+            System.out.print("Enter your education: ");
+            String education = scanner.next();
+
+            // Check eligibility criteria
+            if (age >= 18 && education.equals(educationRequired[companyId])) {
+                System.out.println("Successfully applied for the job at " + companyNames[companyId] + "!");
+                System.out.println("--------------------------------------------");
+            } else {
+                System.out.println("Sorry, you do not meet the eligibility criteria for this job.");
+                System.out.println("--------------------------------------------");
+            }
+        } else {
+            System.out.println("Invalid Company ID. Please try again.");
+            System.out.println("--------------------------------------------");
+        }
+    }
+
+    private static void postJob(String companyName, Scanner scanner) {
+        System.out.println("Enter job details:");
+        System.out.print("Enter job title: ");
+        String title = scanner.next();
+        System.out.print("Enter job salary: ");
+        double salary = scanner.nextDouble();
+        System.out.print("Enter job education: ");
+        String education = scanner.next();
+
+        // You can add the job details to a data structure or perform any other necessary actions.
+        System.out.println("Job posted successfully!");
+        System.out.println("--------------------------------------------");
+    }
+
+    private static void viewJobSeekers(String companyName) {
+        System.out.println("List of job seekers who applied to jobs posted by " + companyName + ":");
+
+        // Simulating job seekers who applied with names and emails
+        String[] jobSeekers = {"John Doe: john@example.com", "Jane Smith: jane@example.com", "Bob Johnson: bob@example.com"};
+
+        if (jobSeekers.length > 0) {
+            for (String jobSeeker : jobSeekers) {
+                String[] seekerInfo = jobSeeker.split(":");
+                if (seekerInfo.length == 2) {
+                    String seekerName = seekerInfo[0].trim();
+                    String seekerEmail = seekerInfo[1].trim();
+                    System.out.println("- " + seekerName + " (" + seekerEmail + ")");
+                }
+            }
+        } else {
+            System.out.println("Nobody has applied for jobs posted by " + companyName + ".");
+        }
+        System.out.println("--------------------------------------------");
+    }
+
+    private static int findRecruiter(String companyName, String password) {
+        for (int i = 0; i < companyNames.length; i++) {
+            if (companyNames[i].equalsIgnoreCase(companyName) && passwords[i].equals(password)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
